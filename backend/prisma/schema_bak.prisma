@@ -1,0 +1,87 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum TokenType {
+  ACCESS
+  REFRESH
+  RESET_PASSWORD
+  VERIFY_EMAIL
+}
+
+// User Model
+model User {
+  user_id    String    @id @default(uuid()) @db.Uuid
+  username   String    @unique
+  password   String
+  role       String
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  borrows    Borrow[]  // List of borrow records related to the user
+  returns    Return[]  // List of return records related to the user
+  tokens     Token[]   @relation(name: "UserTokens") // Relationship to tokens
+}
+
+// Token Model
+model Token {
+  id                       String    @id @default(uuid()) @db.Uuid
+  type                     TokenType // Type of the token
+  ip                       String?   @db.VarChar(50) // IP address
+  device                   String?   @db.VarChar(255) // Device info
+  latitude                 String?   @db.VarChar(100) // Latitude info
+  longitude                String?   @db.VarChar(100) // Longitude info
+  token                    String    @unique // Unique token string
+  refresh_token            String?   @unique // Optional refresh token
+  expiration               DateTime // Expiration time of the access token
+  expiration_refresh_token DateTime? // Expiration time of the refresh token
+  created_by               String    @db.Uuid // ID of the user who created the token
+  created_at               DateTime  @default(now()) // Creation timestamp
+  updated_at               DateTime? @updatedAt // Last update timestamp
+
+  user User? @relation(name: "UserTokens", fields: [created_by], references: [user_id]) // Relationship to the User
+}
+
+// Book Model
+model Book {
+  book_id    String    @id @default(uuid()) @db.Uuid
+  title      String    // Title of the book
+  author     String    // Author of the book
+  category   String    // Category of the book
+  isbn       String    @unique // Unique ISBN
+  status     String    // Status of the book ("available" or "borrowed")
+  borrows    Borrow[]  // List of borrow records related to the book
+  created_at DateTime  @default(now()) // Creation timestamp
+  created_by String    @db.Uuid // User who created the book entry
+  updated_at DateTime? @updatedAt // Last update timestamp
+}
+
+// Borrow Model
+model Borrow {
+  borrow_id   String    @id @default(uuid()) @db.Uuid // Unique identifier for the borrow record
+  user_id     String    @db.Uuid // ID of the user who borrowed the book
+  book_id     String    @db.Uuid // ID of the borrowed book
+  borrow_date DateTime  @default(now()) // Date when the book was borrowed
+  due_date    DateTime // Due date for returning the book
+  return_date DateTime? // Nullable return date
+
+  user        User      @relation(fields: [user_id], references: [user_id]) // Relationship to User
+  book        Book      @relation(fields: [book_id], references: [book_id]) // Relationship to Book
+  returns     Return[]  // List of return records related to this borrow
+}
+
+// Return Model
+model Return {
+  return_id   String   @id @default(uuid()) @db.Uuid // Unique identifier for the return record
+  borrow_id   String   @unique @db.Uuid // Ensure this matches the Borrow model's ID
+  return_date DateTime // Date when the book was returned
+  late_fee    Float?   // Optional late fee if the book is returned late
+
+  borrow      Borrow   @relation(fields: [borrow_id], references: [borrow_id]) // Relationship to Borrow
+  userUser_id String?  @db.Uuid // Optional user ID for the user who returned the book
+  user        User?    @relation(fields: [userUser_id], references: [user_id]) // Relationship to User
+}
