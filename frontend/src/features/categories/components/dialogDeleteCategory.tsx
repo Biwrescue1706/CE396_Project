@@ -1,3 +1,4 @@
+//frotend/src/features/categories/components/dialogDeleteCategory.tsx
 import { deleteCategory } from "@/services/category.services";
 import { AlertDialog, Button, Flex,} from "@radix-ui/themes";
 

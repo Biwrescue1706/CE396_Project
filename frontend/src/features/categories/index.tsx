@@ -1,3 +1,4 @@
+//frotend/src/features/categories/index.tsx
 import { useEffect, useState } from "react";
 import { Table, Card, Flex, Text } from "@radix-ui/themes";
 import { getCategories } from "@/services/category.services";

@@ -1,3 +1,4 @@
+//frotend/src/features/categories/components/dialogAddCategory.tsx
 import { postCategory } from "@/services/category.services";
 import { useState } from "react";
 import { Dialog, Button, Flex,Text, TextField} from "@radix-ui/themes";

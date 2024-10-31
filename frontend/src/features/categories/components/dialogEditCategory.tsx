@@ -1,7 +1,7 @@
+//frotend/src/features/categories/components/dialogEditCategory.tsx
 import { pathCategory } from "@/services/category.services";
 import { useState } from "react";
 import { Dialog, Button, Flex,Text, TextField,} from "@radix-ui/themes";
-import path from "path";
 
 type DialogCategoryProps = {
   getCategoriesData: Function;
