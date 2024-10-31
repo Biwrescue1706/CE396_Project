@@ -8,7 +8,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router />
     </QueryClientProvider>
-  )
+  );
 }
 
-export default App
+export default App;

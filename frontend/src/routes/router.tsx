@@ -1,30 +1,40 @@
-//frotend/src/routes/router.tsx
-import HomePage from "@/pages/home";
+// src/routes/router.tsx
+import HomePage from "@/pages/Homes/index";
+import LoginPage from "@/pages/LoginPage";
+import RegisterPage from "@/pages/RegisterPage";
+import NotFoundPage from "@/pages/NotFoundPage";
+import CategoriesPage from "@/pages/category";
 import MainLayout from "@/components/layouts/layout.main";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Error404 from "@/components/layouts/layout.error404";
-import CategoriesPage from "@/pages/category";
+
 const router = createBrowserRouter([
     {
         path: "/",
         element: <MainLayout />,
         children: [
-          {
-            index: true,
-            element: <HomePage />,
-          },
-          {
-            path: "/categories",
-            element: <CategoriesPage />
-          }
+            {
+                index: true,
+                element: <HomePage />,
+            },
+            {
+                path: "/login",
+                element: <LoginPage />,
+            },
+            {
+                path: "/register",
+                element: <RegisterPage />,
+            },
+            {
+                path: "/categories",
+                element: <CategoriesPage />,
+            },
         ],
     },
     {
         path: "*",
-        element: <Error404 />,
+        element: <NotFoundPage />,
     },
-])
-
+]);
 
 export default function Router() {
     return <RouterProvider router={router} />;
