@@ -1,3 +1,4 @@
+//frotend/src/routes/router.tsx
 import HomePage from "@/pages/home";
 import MainLayout from "@/components/layouts/layout.main";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
